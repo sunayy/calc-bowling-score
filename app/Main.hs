@@ -10,6 +10,9 @@ data Frame next =
 
 type Bowling = Free Frame ()
 
+markedRawPoint :: Int
+markedRawPoint = 10
+
 frame :: String -> String -> Bowling
 frame a b = liftF $ Normal a b ()
 
@@ -38,7 +41,7 @@ runPrintFrames (Free (Final a b c)) = do
     putStrLn $ "(" ++ a ++ "," ++ b ++ "," ++ c ++ ")"
 
 readRoll :: String -> Int
-readRoll "X" = 10
+readRoll "X" = markedRawPoint
 readRoll "-" = 0
 readRoll "/" = 0
 readRoll "G" = 0
@@ -46,25 +49,25 @@ readRoll " " = 0
 readRoll a = read a :: Int
 
 readRawPoint :: String -> String -> Int
-readRawPoint _ "X" = 10
-readRawPoint _ "/" = 10
+readRawPoint _ "X" = markedRawPoint
+readRawPoint _ "/" = markedRawPoint
 readRawPoint a b = readRoll a + readRoll b
 
 readRawPointAt10Th :: String -> String -> String -> Int
-readRawPointAt10Th "X" "X" r = 20 + readRoll r
-readRawPointAt10Th "X" a b = 10 + readRawPoint a b
-readRawPointAt10Th _ "/" b = 10 + readRoll b
+readRawPointAt10Th "X" "X" r = markedRawPoint * 2 + readRoll r
+readRawPointAt10Th "X" a b = markedRawPoint + readRawPoint a b
+readRawPointAt10Th _ "/" b = markedRawPoint + readRoll b
 readRawPointAt10Th a b _ = readRawPoint a b
 
 bonus :: Bowling -> Int
 -- Strike Bonus
-bonus (Free (Normal " " "X" (Free (Normal " " "X" (Free (Normal " " "X" _)))))) = 20
-bonus (Free (Normal " " "X" (Free (Normal " " "X" (Free (Normal a _ _)))))) = 10 + readRoll a
-bonus (Free (Normal " " "X" (Free (Normal " " "X" (Free (Final a _ _)))))) = 10 + readRoll a
+bonus (Free (Normal " " "X" (Free (Normal " " "X" (Free (Normal " " "X" _)))))) = markedRawPoint * 2
+bonus (Free (Normal " " "X" (Free (Normal " " "X" (Free (Normal a _ _)))))) = markedRawPoint + readRoll a
+bonus (Free (Normal " " "X" (Free (Normal " " "X" (Free (Final a _ _)))))) = markedRawPoint + readRoll a
 bonus (Free (Normal " " "X" (Free (Final a b _)))) = readRawPoint a b
 bonus (Free (Normal " " "X" (Free (Normal a b _)))) = readRawPoint a b
 -- Spare Bonus
-bonus (Free (Normal _ "/" (Free (Normal " " "X" _)))) = 10
+bonus (Free (Normal _ "/" (Free (Normal " " "X" _)))) = markedRawPoint
 bonus (Free (Normal _ "/" (Free (Normal a _ _)))) = readRoll a
 bonus (Free (Normal _ "/" (Free (Final a _ _)))) = readRoll a
 -- otherwise
