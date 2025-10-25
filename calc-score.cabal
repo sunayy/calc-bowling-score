@@ -23,7 +23,7 @@ extra-source-files: CHANGELOG.md
 
 executable calc-score
     main-is:          Main.hs
-    other-modules:    ByFree
+    other-modules:    ByFree, ByList
 
     -- Modules included in this executable, other than Main.
     -- other-modules:

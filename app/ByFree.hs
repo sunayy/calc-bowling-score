@@ -1,5 +1,5 @@
 {-# LANGUAGE DeriveFunctor #-}
-module ByFree (Bowling, runPrintFrames, runCalcScore, frame, finalFrame)where
+module ByFree (Bowling, runPrintFrames, runCalcScore, frame, finalFrame) where
 
 import Control.Monad.Free  
 
